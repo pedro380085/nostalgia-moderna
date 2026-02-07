@@ -3,8 +3,9 @@ main = "worker.js"
 compatibility_date = "2024-11-01"
 
 [assets]
-directory = "."
+directory = "./public"
 binding = "ASSETS"
+run_worker_first = true
 
 [triggers]
 crons = ["*/3 * * * *"]
@@ -12,3 +13,4 @@ crons = ["*/3 * * * *"]
 [[kv_namespaces]]
 binding = "STATE"
 id = "de5f8a1299fc4f9f83a177273cd91405"
+preview_id = "5d5452db8c0845a7a0e3da1dae41e5aa"
