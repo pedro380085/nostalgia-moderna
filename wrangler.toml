@@ -8,7 +8,7 @@ binding = "ASSETS"
 run_worker_first = true
 
 [triggers]
-crons = ["*/3 * * * *"]
+crons = ["0 * * * *"]
 
 [[kv_namespaces]]
 binding = "STATE"

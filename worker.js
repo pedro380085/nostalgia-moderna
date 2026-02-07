@@ -12,32 +12,15 @@ export default {
 			});
 		}
 
-		const plushtml = await fetch(TARGET_URL, {
-			headers: {
-				"user-agent":
-					"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-				"accept":
-					"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-				"accept-language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
-				"cache-control": "no-cache",
-				"pragma": "no-cache",
-				"upgrade-insecure-requests": "1",
-			},
-			cf: {
-				cacheTtl: 0,
-				cacheEverything: false,
-			},
-		});
-
 		const state = await getState(env);
 		const hide = state?.hide === true;
 
 		const assetResponse = await env.ASSETS.fetch(request);
 		const contentType = assetResponse.headers.get("content-type") || "";
 
-		// if (!hide || !contentType.includes("text/html")) {
-		// 	return assetResponse;
-		// }
+		if (!hide || !contentType.includes("text/html")) {
+			return assetResponse;
+		}
 
 		const html = await assetResponse.text();
 		const hiddenHtml = injectHideStyle(html);
@@ -46,9 +29,7 @@ export default {
 		headers.delete("content-length");
 		headers.set("cache-control", "no-store");
 
-		const a = await plushtml.text();
-
-		return new Response(hiddenHtml + a, {
+		return new Response(hiddenHtml, {
 			status: assetResponse.status,
 			headers,
 		});
@@ -123,7 +104,7 @@ async function updateState(env) {
 		checkedAt: now,
 	};
 
-	await env.STATE.put(STATE_KEY, JSON.stringify(state));
+	// await env.STATE.put(STATE_KEY, JSON.stringify(state));
 }
 
 async function countResults(response) {
