@@ -11,4 +11,4 @@ crons = ["0 * * * *"]
 
 [[kv_namespaces]]
 binding = "STATE"
-id = "nostalgia"
+id = "de5f8a1299fc4f9f83a177273cd91405"
