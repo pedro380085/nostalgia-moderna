@@ -7,7 +7,7 @@ directory = "."
 binding = "ASSETS"
 
 [triggers]
-crons = ["0 * * * *"]
+crons = ["*/3 * * * *"]
 
 [[kv_namespaces]]
 binding = "STATE"
