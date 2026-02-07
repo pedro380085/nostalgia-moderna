@@ -61,6 +61,7 @@ async function updateState(env) {
 	let count = 0;
 	let ok = false;
 	let status = 0;
+	let found = false;
 
 	try {
 		const response = await fetch(TARGET_URL, {
@@ -79,17 +80,20 @@ async function updateState(env) {
 
 		if (response.ok) {
 			ok = true;
-			count = await countResults(response);
+			const result = await countResults(response);
+			found = result.found;
+			count = result.count;
 		}
 	} catch {
 		ok = false;
 	}
 
-	const hide = ok && count < HIDE_THRESHOLD;
+	const hide = !ok || !found || count < HIDE_THRESHOLD;
 
 	const state = {
 		hide,
 		count,
+		found,
 		ok,
 		status,
 		checkedAt: now,
@@ -99,20 +103,14 @@ async function updateState(env) {
 }
 
 async function countResults(response) {
-	let count = 0;
-	const fallback = response.clone();
+	const text = await response.text();
+	const match = text.match(
+		/"type"\s*:\s*"TOTAL_RESULTS"\s*,\s*"text"\s*:\s*"(\d+)\s+resultados"/i
+	);
 
-	const rewriter = new HTMLRewriter().on("li.ui-search-layout__item", {
-		element() {
-			count += 1;
-		},
-	});
+	if (!match) {
+		return { found: false, count: 0 };
+	}
 
-	await rewriter.transform(response).text();
-
-	if (count > 0) return count;
-
-	const text = await fallback.text();
-	const matches = text.match(/ui-search-layout__item/g);
-	return matches ? matches.length : 0;
+	return { found: true, count: Number(match[1]) };
 }
