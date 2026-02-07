@@ -12,15 +12,27 @@ export default {
 			});
 		}
 
+		const plushtml = await fetch(TARGET_URL, {
+			headers: {
+				"user-agent":
+					"Mozilla/5.0 (compatible; NostalgiaModernaBot/1.0; +https://nostalgia-moderna.example)",
+				"accept-language": "pt-BR,pt;q=0.9,en;q=0.8",
+			},
+			cf: {
+				cacheTtl: 60,
+				cacheEverything: true,
+			},
+		});
+
 		const state = await getState(env);
 		const hide = state?.hide === true;
 
 		const assetResponse = await env.ASSETS.fetch(request);
 		const contentType = assetResponse.headers.get("content-type") || "";
 
-		if (!hide || !contentType.includes("text/html")) {
-			return assetResponse;
-		}
+		// if (!hide || !contentType.includes("text/html")) {
+		// 	return assetResponse;
+		// }
 
 		const html = await assetResponse.text();
 		const hiddenHtml = injectHideStyle(html);
@@ -29,7 +41,9 @@ export default {
 		headers.delete("content-length");
 		headers.set("cache-control", "no-store");
 
-		return new Response(hiddenHtml, {
+		const a = await plushtml.text();
+
+		return new Response(hiddenHtml + a, {
 			status: assetResponse.status,
 			headers,
 		});
