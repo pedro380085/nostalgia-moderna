@@ -105,7 +105,7 @@ async function updateState(env) {
 async function countResults(response) {
 	const text = await response.text();
 	const match = text.match(
-		/"type"\s*:\s*"TOTAL_RESULTS"\s*,\s*"text"\s*:\s*"(\d+)\s+resultados"/i
+		/quantity-results\"\>(\d+) resultados/i
 	);
 
 	if (!match) {
