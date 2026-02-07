@@ -15,12 +15,17 @@ export default {
 		const plushtml = await fetch(TARGET_URL, {
 			headers: {
 				"user-agent":
-					"Mozilla/5.0 (compatible; NostalgiaModernaBot/1.0; +https://nostalgia-moderna.example)",
-				"accept-language": "pt-BR,pt;q=0.9,en;q=0.8",
+					"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+				"accept":
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+				"accept-language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+				"cache-control": "no-cache",
+				"pragma": "no-cache",
+				"upgrade-insecure-requests": "1",
 			},
 			cf: {
-				cacheTtl: 60,
-				cacheEverything: true,
+				cacheTtl: 0,
+				cacheEverything: false,
 			},
 		});
 
@@ -81,12 +86,17 @@ async function updateState(env) {
 		const response = await fetch(TARGET_URL, {
 			headers: {
 				"user-agent":
-					"Mozilla/5.0 (compatible; NostalgiaModernaBot/1.0; +https://nostalgia-moderna.example)",
-				"accept-language": "pt-BR,pt;q=0.9,en;q=0.8",
+					"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+				"accept":
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+				"accept-language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+				"cache-control": "no-cache",
+				"pragma": "no-cache",
+				"upgrade-insecure-requests": "1",
 			},
 			cf: {
-				cacheTtl: 60,
-				cacheEverything: true,
+				cacheTtl: 0,
+				cacheEverything: false,
 			},
 		});
 
