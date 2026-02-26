@@ -12,6 +12,33 @@ export default {
 			});
 		}
 
+		if (url.pathname === "/flag/hide") {
+			const value = parseBoolean(url.searchParams.get("value"));
+			if (value === null) {
+				const state = await getState(env);
+				return jsonResponse({
+					ok: false,
+					error: "Use /flag/hide?value=true or /flag/hide?value=false",
+					current: state?.hide === true,
+				}, 400);
+			}
+
+			const current = await getState(env);
+			const nextState = {
+				...(current || {}),
+				hide: value,
+				manualOverride: true,
+				updatedAt: new Date().toISOString(),
+			};
+			await env.STATE.put(STATE_KEY, JSON.stringify(nextState));
+
+			return jsonResponse({
+				ok: true,
+				hide: nextState.hide,
+				message: "hide updated",
+			});
+		}
+
 		const state = await getState(env);
 		const hide = state?.hide === true;
 
@@ -46,6 +73,21 @@ async function getState(env) {
 	} catch {
 		return null;
 	}
+}
+
+function parseBoolean(value) {
+	if (!value) return null;
+	const normalized = value.toLowerCase();
+	if (normalized === "true" || normalized === "1" || normalized === "on") return true;
+	if (normalized === "false" || normalized === "0" || normalized === "off") return false;
+	return null;
+}
+
+function jsonResponse(body, status = 200) {
+	return new Response(JSON.stringify(body, null, 2), {
+		status,
+		headers: { "content-type": "application/json; charset=UTF-8" },
+	});
 }
 
 function injectHideStyle(html) {
